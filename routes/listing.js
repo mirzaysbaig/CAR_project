@@ -15,22 +15,25 @@ router
     .get(wrapAsync(listingController.index))
     .post(
         isLoggedIn,
-        upload.single("listing[image]"),
+        upload.array("listing[images]", 10), // Allow up to 10 images
         validateListing,
         wrapAsync(listingController.createListing)
     );
 
+
+router.get("/search",isLoggedIn,listingController.searchListing)
 //new route
 //is new route ko listing/:id se upar hi likhna padega
 //warna error ayega qki "new" ko ye id samajhega
 router.get("/new",isLoggedIn,listingController.renderNewForm)
+
 
 router
     .route("/:id")
     .get(wrapAsync(listingController.showListing))
     .put(isLoggedIn,
         isOwner,
-        upload.single("listing[image]"),
+        upload.array("listing[image]",10),
         validateListing,
         wrapAsync(listingController.updateListing)
     )
